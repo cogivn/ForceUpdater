@@ -38,7 +38,6 @@ stages:
 lintDebug:
   stage: build
   only:
-    - master
     - tags
   script:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
@@ -46,27 +45,12 @@ lintDebug:
 assembleDebug:
   stage: build
   only:
-    - master
     - tags
   script:
     - ./gradlew assembleDebug
   artifacts:
     paths:
-      - app/build/outputs/
-
-assembleRelease:
-  stage: release
-  only:
-    - release
-  script:
-    - ./gradlew assembleRelease
-      -Pandroid.injected.signing.store.file=$(pwd)/key/key.keystore
-      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
-      -Pandroid.injected.signing.key.alias=$KEY_ALIAS
-      -Pandroid.injected.signing.key.password=$KEY_PASSWORD
-  artifacts:
-    paths:
-      - app/build/outputs/apk/release
+      - app/build/outputs/apk
 
 debugTests:
   stage: test
