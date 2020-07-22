@@ -39,7 +39,7 @@ lintDebug:
   stage: build
   only:
     - master
-    - merge_requests
+    - tags
   script:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
 
@@ -47,7 +47,7 @@ assembleDebug:
   stage: build
   only:
     - master
-    - merge_requests
+    - tags
   script:
     - ./gradlew assembleDebug
   artifacts:
