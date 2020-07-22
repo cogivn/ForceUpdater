@@ -55,7 +55,6 @@ assembleDebug:
 debugTests:
   stage: test
   only:
-    - master
-    - merge_requests
+    - tags
   script:
     - ./gradlew -Pci --console=plain :app:testDebug
