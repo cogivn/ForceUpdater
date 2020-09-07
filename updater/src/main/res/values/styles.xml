@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AlertDialogCustom" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog.Centered">
+        <item name="colorSurface">@color/colorWhite</item>
+        <item name="android:fontFamily">@font/dino_font_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="colorPrimary">@color/colorDialogButton</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/ButtonStyle</item>
+    </style>
+
+    <style name="TitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>
