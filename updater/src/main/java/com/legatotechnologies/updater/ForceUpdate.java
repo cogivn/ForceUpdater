@@ -1,30 +1,31 @@
 package com.legatotechnologies.updater;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.legatotechnologies.updater.models.Version;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 /**
  * Created by davidng on 6/21/17.
  */
 
-public class ForceUpdate implements IForceUpdate{
+public class ForceUpdate implements IForceUpdate {
 
     public static final int Milli = 0;
     public static final int Minute = 1;
     public static final int Hour = 2;
     public static final int Day = 3;
 
-    private static final String TAG = "ForceUpdate";
     private static final int DEFAULT_NOTIFICATION_TIME = 1000 * 60 * 60 * 24;
     private static final int DEFAULT_TYPE = 0;
     private static final String DEFAULT_MESSAGE = "New Update Available";
-    private static final String DEFAULT_URL = "";
     private static final int DEFAULT_UPDATE_TYPE = 0;
 
     private Context mContext;
@@ -37,6 +38,9 @@ public class ForceUpdate implements IForceUpdate{
     private Language mLanguage;
     private long mMillisecond;
     private int mType;
+    private View mCustomView;
+    private int mCustomThemeRes;
+    private boolean isOverrideButtonsAction = false;
 
     public ForceUpdate(Context context) {
         mContext = context;
@@ -47,6 +51,7 @@ public class ForceUpdate implements IForceUpdate{
         mLanguage = Language.Eng;
         mMillisecond = DEFAULT_NOTIFICATION_TIME;
         mType = DEFAULT_TYPE;
+        mCustomThemeRes = R.style.Theme_ForceUpdateAlertDialog;
     }
 
     @Override
@@ -58,6 +63,27 @@ public class ForceUpdate implements IForceUpdate{
     @Override
     public ForceUpdate setJSONString(String jsonString) {
         mJsonString = jsonString;
+        return this;
+    }
+
+    @Override
+    public ForceUpdate setCustomView(@NonNull View view, boolean disabledDefaultButton) {
+        this.isOverrideButtonsAction = disabledDefaultButton;
+        this.mCustomView = view;
+        return this;
+    }
+
+    @Override
+    public ForceUpdate setCustomView(int resId, boolean disabledDefaultButton) {
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        this.isOverrideButtonsAction = disabledDefaultButton;
+        this.mCustomView = inflater.inflate(resId, null);
+        return this;
+    }
+
+    @Override
+    public ForceUpdate setTheme(int style) {
+        mCustomThemeRes = style;
         return this;
     }
 
@@ -88,7 +114,7 @@ public class ForceUpdate implements IForceUpdate{
     }
 
     @Override
-    public void start(){
+    public void start() {
         if (mJsonObject != null) { //parse JSONObject
             mJsonObject = ParseObject.getVersionObject(mJsonObject);
         } else if (mJsonString != null) { // parse JsonString
@@ -103,7 +129,7 @@ public class ForceUpdate implements IForceUpdate{
 
     private void parseObject() throws illegalUrlException {
         if (mJsonObject != null) {
-            if (!Utils.isValidUrl(mJsonObject.optString("dl_link").trim())){
+            if (!Utils.isValidUrl(mJsonObject.optString("dl_link").trim())) {
                 throw new illegalUrlException();
             }
 
@@ -129,18 +155,14 @@ public class ForceUpdate implements IForceUpdate{
         }
 
         if (mUpdatePreference.getSkipVersion() != null) {
-            if (isSkipPreference()) {
-                return;
-            } else {
+            if (!isSkipPreference()) {
                 Utils.setPreferenceForSkip(mContext, null);
                 initOptionDialog();
-                return;
             }
+            return;
         }
 
-        if (isLaterPreference() && !isVersionNoChange()) {
-
-        } else {
+        if (!isLaterPreference() || isVersionNoChange()) {
             initOptionDialog();
         }
     }
@@ -149,7 +171,7 @@ public class ForceUpdate implements IForceUpdate{
         return !Utils.compareVersion(mUpdatePreference.getSkipVersion(), mVersion.getLatestVersion());
     }
 
-    private boolean isVersionNoChange(){
+    private boolean isVersionNoChange() {
         return Utils.compareVersion(mUpdatePreference.getLastVersion(), mVersion.getLatestVersion());
     }
 
@@ -162,18 +184,32 @@ public class ForceUpdate implements IForceUpdate{
             Utils.setPreferenceForLaterUpdate(mContext, false, 0L); // set the default preference
             return false;
         }
-            //Log.i(TAG, "isLater preference is false");
+        //Log.i(TAG, "isLater preference is false");
         return false;
     }
 
     private void initForceDialog() {
-        mAlertDialog = UtilsDialog.setForceUpdateDialog(mContext, mVersion);
+        mAlertDialog = UtilsDialog.setForceUpdateDialog(
+                mContext,
+                mCustomThemeRes,
+                mVersion,
+                mCustomView,
+                isOverrideButtonsAction
+        );
         mAlertDialog.show();
         Utils.setButtonColor(mAlertDialog);
     }
 
     private void initOptionDialog() {
-        mAlertDialog = UtilsDialog.setOptionalUpdateDialog(mContext, mVersion, mMillisecond, mType, mListener);
+        mAlertDialog = UtilsDialog.setOptionalUpdateDialog(
+                mContext,
+                mCustomThemeRes,
+                mCustomView,
+                mVersion,
+                mMillisecond,
+                mType,
+                isOverrideButtonsAction,
+                mListener);
         mAlertDialog.show();
         Utils.setButtonColor(mAlertDialog);
     }

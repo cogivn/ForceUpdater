@@ -1,5 +1,11 @@
 package com.legatotechnologies.updater;
 
+import android.view.View;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StyleRes;
+
 import org.json.JSONObject;
 
 /**
@@ -15,7 +21,13 @@ interface IForceUpdate {
 
     ForceUpdate setJSONString(String jsonString);
 
+    ForceUpdate setTheme(@StyleRes int style);
+
     ForceUpdate setLang(Language lang);
+
+    ForceUpdate setCustomView(@NonNull View view, boolean disabledDefaultButton);
+
+    ForceUpdate setCustomView(@LayoutRes int resId, boolean disabledDefaultButton);
 
     ForceUpdate setOptionalListener(UtilsDialog.OnOptionalDialogDismissListener listener);
 
