@@ -41,6 +41,7 @@ public class ForceUpdate implements IForceUpdate {
     private View mCustomView;
     private int mCustomThemeRes;
     private boolean isOverrideButtonsAction = false;
+    private boolean isHideDialogTitle = false;
 
     public ForceUpdate(Context context) {
         mContext = context;
@@ -67,17 +68,27 @@ public class ForceUpdate implements IForceUpdate {
     }
 
     @Override
-    public ForceUpdate setCustomView(@NonNull View view, boolean disabledDefaultButton) {
-        this.isOverrideButtonsAction = disabledDefaultButton;
+    public ForceUpdate setCustomView(@NonNull View view) {
         this.mCustomView = view;
         return this;
     }
 
     @Override
-    public ForceUpdate setCustomView(int resId, boolean disabledDefaultButton) {
+    public ForceUpdate setCustomView(int resId) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        this.isOverrideButtonsAction = disabledDefaultButton;
         this.mCustomView = inflater.inflate(resId, null);
+        return this;
+    }
+
+    @Override
+    public ForceUpdate setShouldHideButtons(boolean disabled) {
+        this.isOverrideButtonsAction = disabled;
+        return this;
+    }
+
+    @Override
+    public ForceUpdate setShouldHideTitle(boolean disabled) {
+        this.isHideDialogTitle = disabled;
         return this;
     }
 
@@ -194,7 +205,8 @@ public class ForceUpdate implements IForceUpdate {
                 mCustomThemeRes,
                 mVersion,
                 mCustomView,
-                isOverrideButtonsAction
+                isOverrideButtonsAction,
+                isHideDialogTitle
         );
         mAlertDialog.show();
         Utils.setButtonColor(mAlertDialog);
@@ -209,6 +221,7 @@ public class ForceUpdate implements IForceUpdate {
                 mMillisecond,
                 mType,
                 isOverrideButtonsAction,
+                isHideDialogTitle,
                 mListener);
         mAlertDialog.show();
         Utils.setButtonColor(mAlertDialog);

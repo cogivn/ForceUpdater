@@ -25,9 +25,13 @@ interface IForceUpdate {
 
     ForceUpdate setLang(Language lang);
 
-    ForceUpdate setCustomView(@NonNull View view, boolean disabledDefaultButton);
+    ForceUpdate setCustomView(@NonNull View view);
 
-    ForceUpdate setCustomView(@LayoutRes int resId, boolean disabledDefaultButton);
+    ForceUpdate setCustomView(@LayoutRes int resId);
+
+    ForceUpdate setShouldHideButtons(boolean disabled);
+
+    ForceUpdate setShouldHideTitle(boolean disabled);
 
     ForceUpdate setOptionalListener(UtilsDialog.OnOptionalDialogDismissListener listener);
 

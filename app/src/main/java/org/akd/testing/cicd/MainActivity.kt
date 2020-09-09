@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         ForceUpdate(this)
             .setJSON(json)
             .setTheme(R.style.AlertDialogCustom)
+            .setCustomView(R.layout.dialog_new_version)
             .setNotificationTime(30, ForceUpdate.Milli)
             .start()
     }

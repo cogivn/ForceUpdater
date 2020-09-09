@@ -26,33 +26,36 @@ public class UtilsDialog {
             final long hours,
             final int type,
             final boolean isDisabledButtonActions,
+            final boolean isHideDialogTitle,
             final OnOptionalDialogDismissListener listener) {
-        return new MaterialAlertDialogBuilder(context, themeRes)
-                .setTitle(version.getLanguage().getTitle())
-                .setMessage(version.getMessage())
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, themeRes)
                 .setView(view)
-                .setCancelable(false)
-                .setPositiveButton(version.getLanguage().getPos_btn(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface d, int id) {
-                        if (isDisabledButtonActions) return;
-                        forceProcessPositiveButtonAction(context, version);
-                    }
-                })
-                .setNegativeButton(version.getLanguage().getNeg_btn(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface d, int id) {
-                        if (isDisabledButtonActions) return;
-                        forceProcessNegativeButtonAction(context, version, listener);
-                    }
-                })
-                .setNeutralButton(version.getLanguage().getNeutral_btn(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface d, int id) {
-                        if (isDisabledButtonActions) return;
-                        forceProcessNeutralButtonAction(context, version, hours, type, listener);
-                    }
-                }).create();
+                .setCancelable(false);
+        if (!isHideDialogTitle) {
+            builder.setTitle(version.getLanguage().getTitle());
+            builder.setMessage(version.getMessage());
+        }
+        if (!isDisabledButtonActions) {
+            builder.setPositiveButton(version.getLanguage().getPos_btn(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface d, int id) {
+                    forceProcessPositiveButtonAction(context, version);
+                }
+            });
+            builder.setNegativeButton(version.getLanguage().getNeg_btn(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface d, int id) {
+                    forceProcessNegativeButtonAction(context, version, listener);
+                }
+            });
+            builder.setNeutralButton(version.getLanguage().getNeutral_btn(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface d, int id) {
+                    forceProcessNeutralButtonAction(context, version, hours, type, listener);
+                }
+            });
+        }
+        return builder.create();
 
     }
 
@@ -61,29 +64,32 @@ public class UtilsDialog {
             final int themeRes,
             final Version version,
             final View view,
-            final boolean isOverrideButtonActions
+            final boolean isOverrideButtonActions,
+            final boolean isHideDialogTitle
     ) {
         final AlertDialog dialog = new MaterialAlertDialogBuilder(context, themeRes)
-                .setTitle(version.getLanguage().getTitle())
-                .setMessage(version.getMessage())
                 .setCancelable(false)
                 .setView(view)
                 .setPositiveButton(version.getLanguage().getPos_btn(), null)
                 .create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button button = (dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (isOverrideButtonActions) return;
-                        forceProcessPositiveButtonAction(context, version);
-                    }
-                });
-            }
-        });
+        if (!isHideDialogTitle) {
+            dialog.setTitle(version.getLanguage().getTitle());
+            dialog.setMessage(version.getMessage());
+        }
+        if (!isOverrideButtonActions) {
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    Button button = (dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            forceProcessPositiveButtonAction(context, version);
+                        }
+                    });
+                }
+            });
+        }
         return dialog;
     }
 
