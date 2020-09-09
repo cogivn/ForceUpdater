@@ -118,10 +118,10 @@ public class UtilsDialog {
     public static void forceProcessNeutralButtonAction(
             Context context,
             Version version,
-            long hours,
+            long milliseconds,
             int type,
             OnOptionalDialogDismissListener listener) {
-        long notificationTime = UtilsTime.calculateNotificationTime(hours, type);
+        long notificationTime = UtilsTime.calculateNotificationTime(milliseconds, type);
         Utils.setPreferenceLastVersion(context, version.getLatestVersion());
         Utils.setPreferenceForLaterUpdate(context, isLaterUpdate, notificationTime);
         if (listener != null) {

@@ -1,6 +1,7 @@
 package org.akd.testing.cicd
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -29,17 +30,20 @@ class MainActivity : AppCompatActivity() {
 
 
         val json = ForceUpdate.initUpdateJSon(
-            "https://google.com",
+            "https://developer.android.com/about?gclid=EAIaIQobChMI8aOCnpvb6wIVlJvCCh03RwFBEAAYASAAEgLp1vD_BwE&gclsrc=aw.ds",
             "3.0",
-            "Fuck version!",
+            "Android 11, the newest version of Android, sets you up to take advantage of a range of new experiences, from foldable devices to stronger protections for your users.",
             0
         )
 
-        ForceUpdate(this)
+        val updater = ForceUpdate(this)
             .setJSON(json)
             .setTheme(R.style.AlertDialogCustom)
             .setCustomView(R.layout.dialog_new_version)
+            .setShouldHideTitle(true)
             .setNotificationTime(30, ForceUpdate.Milli)
             .start()
+
+        Log.d("MainActivity", "version=${updater.version}, milliseconds=${updater.milliseconds}")
     }
 }

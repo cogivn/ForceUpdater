@@ -35,5 +35,5 @@ interface IForceUpdate {
 
     ForceUpdate setOptionalListener(UtilsDialog.OnOptionalDialogDismissListener listener);
 
-    void start();
+    ForceUpdate start();
 }

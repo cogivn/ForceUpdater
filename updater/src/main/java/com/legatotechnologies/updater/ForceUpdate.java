@@ -124,18 +124,26 @@ public class ForceUpdate implements IForceUpdate {
         return this;
     }
 
+    public Version getVersion() {
+        return this.mVersion;
+    }
+
+    public long getMilliseconds() {
+        return this.mMillisecond;
+    }
+
     @Override
-    public void start() {
+    public ForceUpdate start() {
         if (mJsonObject != null) { //parse JSONObject
             mJsonObject = ParseObject.getVersionObject(mJsonObject);
         } else if (mJsonString != null) { // parse JsonString
             mJsonObject = ParseObject.getVersionObject(mJsonString);
         } else {
-            return;
+            return this;
         }
 
         parseObject();
-
+        return this;
     }
 
     private void parseObject() throws illegalUrlException {

@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:text="Android Beam được kỳ vọng sẽ trở thành đối trọng của AirDrop trên iOS đã nổi tiếng từ lâu. Về cơ bản, đây sẽ là một tính năng chia sẻ tệp giữa những thiết bị Android không cần bất kỳ ứng dụng bên thứ ba nào."
+        android:text="Android 11, the newest version of Android, sets you up to take advantage of a range of new experiences, from foldable devices to stronger protections for your users."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/alertTitle" />
