@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacingL">10dp</dimen>
+
+
+    <!--Text Size-->
+    <dimen name="title_dialog_size">22sp</dimen>
+    <dimen name="content_dialog_size">17sp</dimen>
+</resources>

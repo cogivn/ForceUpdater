@@ -41,7 +41,6 @@ public class ForceUpdate implements IForceUpdate {
     private View mCustomView;
     private int mCustomThemeRes;
     private boolean isOverrideButtonsAction = false;
-    private boolean isHideDialogTitle = false;
 
     public ForceUpdate(Context context) {
         mContext = context;
@@ -53,6 +52,7 @@ public class ForceUpdate implements IForceUpdate {
         mMillisecond = DEFAULT_NOTIFICATION_TIME;
         mType = DEFAULT_TYPE;
         mCustomThemeRes = R.style.Theme_ForceUpdateAlertDialog;
+        mCustomView = LayoutInflater.from(context).inflate(R.layout.dialog_layout, null);
     }
 
     @Override
@@ -83,12 +83,6 @@ public class ForceUpdate implements IForceUpdate {
     @Override
     public ForceUpdate setShouldHideButtons(boolean disabled) {
         this.isOverrideButtonsAction = disabled;
-        return this;
-    }
-
-    @Override
-    public ForceUpdate setShouldHideTitle(boolean disabled) {
-        this.isHideDialogTitle = disabled;
         return this;
     }
 
@@ -213,8 +207,7 @@ public class ForceUpdate implements IForceUpdate {
                 mCustomThemeRes,
                 mVersion,
                 mCustomView,
-                isOverrideButtonsAction,
-                isHideDialogTitle
+                isOverrideButtonsAction
         );
         mAlertDialog.show();
         Utils.setButtonColor(mAlertDialog);
@@ -229,7 +222,6 @@ public class ForceUpdate implements IForceUpdate {
                 mMillisecond,
                 mType,
                 isOverrideButtonsAction,
-                isHideDialogTitle,
                 mListener);
         mAlertDialog.show();
         Utils.setButtonColor(mAlertDialog);

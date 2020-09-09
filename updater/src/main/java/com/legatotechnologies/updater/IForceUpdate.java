@@ -31,8 +31,6 @@ interface IForceUpdate {
 
     ForceUpdate setShouldHideButtons(boolean disabled);
 
-    ForceUpdate setShouldHideTitle(boolean disabled);
-
     ForceUpdate setOptionalListener(UtilsDialog.OnOptionalDialogDismissListener listener);
 
     ForceUpdate start();

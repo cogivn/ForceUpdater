@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -26,15 +27,18 @@ public class UtilsDialog {
             final long hours,
             final int type,
             final boolean isDisabledButtonActions,
-            final boolean isHideDialogTitle,
             final OnOptionalDialogDismissListener listener) {
+
+        TextView tvTitle = view.findViewById(R.id.tv_title_dialog);
+        TextView tvContent = view.findViewById(R.id.tv_content_dialog);
+
+        if (tvTitle != null) tvTitle.setText(version.getLanguage().getTitle());
+        if (tvContent != null) tvContent.setText(version.getMessage());
+
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, themeRes)
                 .setView(view)
                 .setCancelable(false);
-        if (!isHideDialogTitle) {
-            builder.setTitle(version.getLanguage().getTitle());
-            builder.setMessage(version.getMessage());
-        }
+
         if (!isDisabledButtonActions) {
             builder.setPositiveButton(version.getLanguage().getPos_btn(), new DialogInterface.OnClickListener() {
                 @Override
@@ -64,18 +68,20 @@ public class UtilsDialog {
             final int themeRes,
             final Version version,
             final View view,
-            final boolean isOverrideButtonActions,
-            final boolean isHideDialogTitle
+            final boolean isOverrideButtonActions
     ) {
+        TextView tvTitle = view.findViewById(R.id.tv_title_dialog);
+        TextView tvContent = view.findViewById(R.id.tv_content_dialog);
+
+        if (tvTitle != null) tvTitle.setText(version.getLanguage().getTitle());
+        if (tvContent != null) tvContent.setText(version.getMessage());
+
         final AlertDialog dialog = new MaterialAlertDialogBuilder(context, themeRes)
                 .setCancelable(false)
                 .setView(view)
                 .setPositiveButton(version.getLanguage().getPos_btn(), null)
                 .create();
-        if (!isHideDialogTitle) {
-            dialog.setTitle(version.getLanguage().getTitle());
-            dialog.setMessage(version.getMessage());
-        }
+
         if (!isOverrideButtonActions) {
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
