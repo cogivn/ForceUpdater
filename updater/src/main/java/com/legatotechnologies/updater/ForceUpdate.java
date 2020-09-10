@@ -1,11 +1,15 @@
 package com.legatotechnologies.updater;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.OnLifecycleEvent;
 
 import com.legatotechnologies.updater.models.Version;
 
@@ -40,10 +44,15 @@ public class ForceUpdate implements IForceUpdate {
     private int mType;
     private View mCustomView;
     private int mCustomThemeRes;
+    private UpdaterLifecycleObserver mLifecycleObserver;
     private boolean isOverrideButtonsAction = false;
+    private boolean isAcceptToReOpenDialog = false;
 
-    public ForceUpdate(Context context) {
+
+    public ForceUpdate(Context context, LifecycleOwner owner) {
         mContext = context;
+        mLifecycleObserver = new UpdaterLifecycleObserver(owner);
+        owner.getLifecycle().addObserver(mLifecycleObserver);
         mUpdatePreference = new UpdatePreference(context);
         mJsonObject = null;
         mJsonString = null;
@@ -52,7 +61,6 @@ public class ForceUpdate implements IForceUpdate {
         mMillisecond = DEFAULT_NOTIFICATION_TIME;
         mType = DEFAULT_TYPE;
         mCustomThemeRes = R.style.Theme_ForceUpdateAlertDialog;
-        mCustomView = LayoutInflater.from(context).inflate(R.layout.dialog_layout, null);
     }
 
     @Override
@@ -132,15 +140,13 @@ public class ForceUpdate implements IForceUpdate {
             mJsonObject = ParseObject.getVersionObject(mJsonObject);
         } else if (mJsonString != null) { // parse JsonString
             mJsonObject = ParseObject.getVersionObject(mJsonString);
-        } else {
-            return this;
         }
-
-        parseObject();
+        mLifecycleObserver.mUpdater = this;
+        launch();
         return this;
     }
 
-    private void parseObject() throws illegalUrlException {
+    void launch() {
         if (mJsonObject != null) {
             if (!Utils.isValidUrl(mJsonObject.optString("dl_link").trim())) {
                 throw new illegalUrlException();
@@ -153,6 +159,7 @@ public class ForceUpdate implements IForceUpdate {
                     ParseObject.findUpdateType(mJsonObject.optInt("force_update", DEFAULT_UPDATE_TYPE)),
                     mLanguage);//Utils.getLocaleCountry()
             init();
+            Log.v("LifecycleOwner", "launch func called");
         }
     }
 
@@ -202,18 +209,33 @@ public class ForceUpdate implements IForceUpdate {
     }
 
     private void initForceDialog() {
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            Log.v("LifecycleOwner", "ForceUpdate dialog showing. Ignore start action.");
+            return;
+        }
+        UtilsDialog.OnForceUpdateActionCallback callback = () -> {
+            isAcceptToReOpenDialog = true;
+        };
         mAlertDialog = UtilsDialog.setForceUpdateDialog(
                 mContext,
                 mCustomThemeRes,
                 mVersion,
                 mCustomView,
-                isOverrideButtonsAction
+                isOverrideButtonsAction,
+                callback
         );
         mAlertDialog.show();
         Utils.setButtonColor(mAlertDialog);
     }
 
     private void initOptionDialog() {
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            Log.v("LifecycleOwner", "ForceUpdate dialog showing. Ignore start action.");
+            return;
+        }
+        UtilsDialog.OnForceUpdateActionCallback callback = () -> {
+            isAcceptToReOpenDialog = true;
+        };
         mAlertDialog = UtilsDialog.setOptionalUpdateDialog(
                 mContext,
                 mCustomThemeRes,
@@ -222,9 +244,40 @@ public class ForceUpdate implements IForceUpdate {
                 mMillisecond,
                 mType,
                 isOverrideButtonsAction,
+                callback,
                 mListener);
         mAlertDialog.show();
         Utils.setButtonColor(mAlertDialog);
+    }
+
+    private static final class UpdaterLifecycleObserver implements androidx.lifecycle.LifecycleObserver {
+        private ForceUpdate mUpdater;
+        private LifecycleOwner mOwner;
+
+        private UpdaterLifecycleObserver(LifecycleOwner owner) {
+            this.mOwner = owner;
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        void onResumed() {
+            try {
+                Log.v("LifecycleOwner", "LifecycleOwner resumed");
+                if (mUpdater != null && mUpdater.isAcceptToReOpenDialog) {
+                    mUpdater.isAcceptToReOpenDialog = false;
+                    mUpdater.launch();
+                    Log.v("LifecycleOwner", "relaunch at resume state.");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        void onDestroyed() {
+            Log.v("LifecycleOwner", "LifecycleOwner destroyed");
+            mOwner.getLifecycle().removeObserver(this);
+            mUpdater = null;
+        }
     }
 
     public static JSONObject initUpdateJSon(String link, String version, String message,

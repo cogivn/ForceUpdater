@@ -2,4 +2,7 @@
 <resources>
     <item name="tv_title_dialog" type="id" />
     <item name="tv_content_dialog" type="id" />
+    <item name="btn_ok_dialog" type="id" />
+    <item name="btn_skip_dialog" type="id" />
+    <item name="btn_update_later_dialog" type="id" />
 </resources>

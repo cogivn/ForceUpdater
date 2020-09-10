@@ -30,19 +30,15 @@ class MainActivity : AppCompatActivity() {
 
 
         val json = ForceUpdate.initUpdateJSon(
-            "https://developer.android.com/about?gclid=EAIaIQobChMI8aOCnpvb6wIVlJvCCh03RwFBEAAYASAAEgLp1vD_BwE&gclsrc=aw.ds",
+            "https://developer.android.com",
             "3.0",
-            "Android 11, the newest version of Android, sets you up to take advantage of a range of new experiences, from foldable devices to stronger protections for your users.",
+            "test",
             0
         )
 
-        val updater = ForceUpdate(this)
+        val updater = ForceUpdate(this, this)
             .setJSON(json)
-            .setTheme(R.style.AlertDialogCustom)
-            .setCustomView(R.layout.dialog_new_version)
             .setNotificationTime(30, ForceUpdate.Milli)
             .start()
-
-        Log.d("MainActivity", "version=${updater.version}, milliseconds=${updater.milliseconds}")
     }
 }
