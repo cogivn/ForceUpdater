@@ -37,8 +37,10 @@ class MainActivity : AppCompatActivity() {
             0
         )
 
-        val updater = ForceUpdate(this, this)
+        ForceUpdate(this, this)
             .setJSON(json)
+            .setTheme(R.style.AlertDialogCustom)
+            .setCustomView(R.layout.dialog_new_version)
             .setLang(Language.Chinese_Simp)
             .setNotificationTime(30, ForceUpdate.Milli)
             .start()
