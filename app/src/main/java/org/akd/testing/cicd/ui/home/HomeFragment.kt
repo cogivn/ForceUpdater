@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.akd.testing.cicd.MainActivity
 import org.akd.testing.cicd.R
+import org.akd.testing.cicd.SecondActivity
 
 class HomeFragment : Fragment() {
 
@@ -34,9 +35,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         text_home.setOnClickListener {
-            Intent(it.context, MainActivity::class.java).also { intent ->
-                context?.startActivity(intent)
-            }
+           activity?.recreate()
         }
     }
 }

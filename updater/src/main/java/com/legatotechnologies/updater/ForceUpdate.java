@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -238,6 +239,11 @@ public class ForceUpdate implements IForceUpdate {
             Log.v(TAG, "ForceUpdate dialog showing. Ignore start action.");
             return;
         }
+        boolean isChangingConfigurations = mLifecycleObserver.getConfigurationChanged();
+        boolean isAlertDialogShowing = mLifecycleObserver.isAlertDialogShowing();
+        if (isChangingConfigurations && !isAlertDialogShowing) {
+            return;
+        }
         UtilsDialog.OnForceUpdateActionCallback callback = () -> {
             isAcceptToReOpenDialog = true;
         };
@@ -258,6 +264,9 @@ public class ForceUpdate implements IForceUpdate {
     private static final class UpdaterLifecycleObserver implements androidx.lifecycle.LifecycleObserver {
         private ForceUpdate mUpdater;
         private LifecycleOwner mOwner;
+
+        private static final String CONFIGURATION_CHANGED = "configurations_changed";
+        private static final String ALERT_DIALOG_SHOWING = "is_dialog_showing";
 
         private UpdaterLifecycleObserver(LifecycleOwner owner) {
             this.mOwner = owner;
@@ -280,26 +289,59 @@ public class ForceUpdate implements IForceUpdate {
 
         @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
         void onStopped() {
-            boolean isChangingConfigurations = false;
-            if (mOwner instanceof Activity) {
-                Activity act = (Activity) mOwner;
-                isChangingConfigurations = act.isChangingConfigurations();
-            } else if (mOwner instanceof Fragment) {
-                Fragment fragment = (Fragment) mOwner;
-                Activity act = fragment.getActivity();
-                if (act != null) isChangingConfigurations = act.isChangingConfigurations();
-            }
             boolean isDialogShowing = mUpdater.isDialogShowing();
-            if (isChangingConfigurations && isDialogShowing) {
-                mUpdater.mAlertDialog.dismiss();
+            Activity activity = getActivity();
+            if (activity != null) {
+                boolean isChangingConfigurations = activity.isChangingConfigurations();
+                activity.getIntent().putExtra(ALERT_DIALOG_SHOWING, isDialogShowing);
+                activity.getIntent().putExtra(CONFIGURATION_CHANGED, isChangingConfigurations);
+                if (isChangingConfigurations && isDialogShowing) {
+                    // prevent memory leak when user change configuration.
+                    mUpdater.mAlertDialog.dismiss();
+                }
             }
         }
 
         @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         void onDestroyed() {
+            Activity activity = getActivity();
+            if (activity != null) {
+                boolean isChangingConfigurations = activity.isChangingConfigurations();
+                activity.getIntent().putExtra(CONFIGURATION_CHANGED, isChangingConfigurations);
+            }
             Log.v(TAG, "LifecycleOwner destroyed");
             mOwner.getLifecycle().removeObserver(this);
             mUpdater = null;
+        }
+
+        @Nullable
+        private Activity getActivity() {
+            Activity activity = null;
+            if (mOwner instanceof Activity) activity = (Activity) mOwner;
+            else if (mOwner instanceof Fragment) {
+                Fragment fragment = (Fragment) mOwner;
+                activity = fragment.getActivity();
+            }
+            return activity;
+        }
+
+        private boolean getConfigurationChanged() {
+            Activity activity = getActivity();
+            if (activity != null) {
+                return activity.getIntent().getBooleanExtra(
+                        CONFIGURATION_CHANGED,
+                        activity.isChangingConfigurations());
+            }
+            return false;
+        }
+
+        private boolean isAlertDialogShowing() {
+            Activity activity = getActivity();
+            if (activity != null) {
+                return activity.getIntent().getBooleanExtra(
+                        ALERT_DIALOG_SHOWING, false);
+            }
+            return false;
         }
     }
 
