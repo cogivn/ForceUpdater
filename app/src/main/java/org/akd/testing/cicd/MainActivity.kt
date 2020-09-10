@@ -9,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.legatotechnologies.updater.ForceUpdate
+import com.legatotechnologies.updater.Language
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         val updater = ForceUpdate(this, this)
             .setJSON(json)
+            .setLang(Language.Chinese_Simp)
             .setNotificationTime(30, ForceUpdate.Milli)
             .start()
     }

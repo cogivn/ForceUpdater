@@ -1,5 +1,6 @@
 package com.legatotechnologies.updater;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
@@ -26,7 +28,7 @@ public class ForceUpdate implements IForceUpdate {
     public static final int Minute = 1;
     public static final int Hour = 2;
     public static final int Day = 3;
-
+    private static final String TAG = ForceUpdate.class.getSimpleName();
     private static final int DEFAULT_NOTIFICATION_TIME = 1000 * 60 * 60 * 24;
     private static final int DEFAULT_TYPE = 0;
     private static final String DEFAULT_MESSAGE = "New Update Available";
@@ -45,9 +47,8 @@ public class ForceUpdate implements IForceUpdate {
     private View mCustomView;
     private int mCustomThemeRes;
     private UpdaterLifecycleObserver mLifecycleObserver;
-    private boolean isOverrideButtonsAction = false;
+    private boolean isShouldBeHideButtons = false;
     private boolean isAcceptToReOpenDialog = false;
-
 
     public ForceUpdate(Context context, LifecycleOwner owner) {
         mContext = context;
@@ -90,7 +91,7 @@ public class ForceUpdate implements IForceUpdate {
 
     @Override
     public ForceUpdate setShouldHideButtons(boolean disabled) {
-        this.isOverrideButtonsAction = disabled;
+        this.isShouldBeHideButtons = disabled;
         return this;
     }
 
@@ -134,6 +135,10 @@ public class ForceUpdate implements IForceUpdate {
         return this.mMillisecond;
     }
 
+    public boolean isDialogShowing() {
+        return mAlertDialog != null && mAlertDialog.isShowing();
+    }
+
     @Override
     public ForceUpdate start() {
         if (mJsonObject != null) { //parse JSONObject
@@ -159,7 +164,7 @@ public class ForceUpdate implements IForceUpdate {
                     ParseObject.findUpdateType(mJsonObject.optInt("force_update", DEFAULT_UPDATE_TYPE)),
                     mLanguage);//Utils.getLocaleCountry()
             init();
-            Log.v("LifecycleOwner", "launch func called");
+            Log.v(TAG, "launch func called");
         }
     }
 
@@ -210,7 +215,7 @@ public class ForceUpdate implements IForceUpdate {
 
     private void initForceDialog() {
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            Log.v("LifecycleOwner", "ForceUpdate dialog showing. Ignore start action.");
+            Log.v(TAG, "ForceUpdate dialog showing. Ignore start action.");
             return;
         }
         UtilsDialog.OnForceUpdateActionCallback callback = () -> {
@@ -221,7 +226,7 @@ public class ForceUpdate implements IForceUpdate {
                 mCustomThemeRes,
                 mVersion,
                 mCustomView,
-                isOverrideButtonsAction,
+                isShouldBeHideButtons,
                 callback
         );
         mAlertDialog.show();
@@ -230,7 +235,7 @@ public class ForceUpdate implements IForceUpdate {
 
     private void initOptionDialog() {
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            Log.v("LifecycleOwner", "ForceUpdate dialog showing. Ignore start action.");
+            Log.v(TAG, "ForceUpdate dialog showing. Ignore start action.");
             return;
         }
         UtilsDialog.OnForceUpdateActionCallback callback = () -> {
@@ -243,7 +248,7 @@ public class ForceUpdate implements IForceUpdate {
                 mVersion,
                 mMillisecond,
                 mType,
-                isOverrideButtonsAction,
+                isShouldBeHideButtons,
                 callback,
                 mListener);
         mAlertDialog.show();
@@ -261,20 +266,38 @@ public class ForceUpdate implements IForceUpdate {
         @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
         void onResumed() {
             try {
-                Log.v("LifecycleOwner", "LifecycleOwner resumed");
-                if (mUpdater != null && mUpdater.isAcceptToReOpenDialog) {
+                Log.v(TAG, "LifecycleOwner resumed");
+                if (mUpdater == null) return;
+                if (mUpdater.isAcceptToReOpenDialog) {
                     mUpdater.isAcceptToReOpenDialog = false;
                     mUpdater.launch();
-                    Log.v("LifecycleOwner", "relaunch at resume state.");
+                    Log.v(TAG, "relaunch at resume state.");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
 
+        @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+        void onStopped() {
+            boolean isChangingConfigurations = false;
+            if (mOwner instanceof Activity) {
+                Activity act = (Activity) mOwner;
+                isChangingConfigurations = act.isChangingConfigurations();
+            } else if (mOwner instanceof Fragment) {
+                Fragment fragment = (Fragment) mOwner;
+                Activity act = fragment.getActivity();
+                if (act != null) isChangingConfigurations = act.isChangingConfigurations();
+            }
+            boolean isDialogShowing = mUpdater.isDialogShowing();
+            if (isChangingConfigurations && isDialogShowing) {
+                mUpdater.mAlertDialog.dismiss();
+            }
+        }
+
         @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         void onDestroyed() {
-            Log.v("LifecycleOwner", "LifecycleOwner destroyed");
+            Log.v(TAG, "LifecycleOwner destroyed");
             mOwner.getLifecycle().removeObserver(this);
             mUpdater = null;
         }
