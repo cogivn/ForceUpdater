@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             .setJSON(json)
             .setTheme(R.style.AlertDialogCustom)
             .setCustomView(R.layout.dialog_new_version)
-            .setLang(Language.Chinese_Simp)
+            .setLang(Language.Eng)
             .setNotificationTime(30, ForceUpdate.Milli)
             .start()
     }

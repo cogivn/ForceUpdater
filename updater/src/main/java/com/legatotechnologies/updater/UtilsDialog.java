@@ -1,7 +1,9 @@
 package com.legatotechnologies.updater;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -83,6 +85,11 @@ public class UtilsDialog {
                         forceProcessNeutralButtonAction(context, version, hours, type, listener));
             }
         }
+        builder.setOnDismissListener(dialog -> {
+            if (view == null) return;
+            ViewGroup vg = (ViewGroup) view.getParent();
+            if (vg != null) vg.removeView(view);
+        });
         return builder.create();
     }
 
@@ -123,6 +130,11 @@ public class UtilsDialog {
                         forceProcessPositiveButtonAction(context, version, okButtonCallback));
             }
         }
+        builder.setOnDismissListener(dialog -> {
+            if (view == null) return;
+            ViewGroup vg = (ViewGroup) view.getParent();
+            if (vg != null) vg.removeView(view);
+        });
         return builder.create();
     }
 
