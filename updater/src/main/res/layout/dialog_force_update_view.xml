@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    android:padding="@dimen/_15sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        android:padding="@dimen/_15sdp">
+
+        <TextView
+            android:id="@id/tv_title_dialog"
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:text="@string/force_update_title"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_16ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@id/tv_content_dialog"
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_dialog"
+            tools:text="abc" />
+
+        <TextView
+            android:id="@id/btn_update_later_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="start|bottom"
+            android:paddingStart="@dimen/zero"
+            android:paddingTop="@dimen/_15sdp"
+            android:paddingEnd="@dimen/spacingL"
+            android:paddingBottom="@dimen/zero"
+            android:text="@string/force_update_update_later"
+            android:textColor="@color/force_text_color_selector"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_content_dialog" />
+
+        <TextView
+            android:id="@id/btn_ok_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:paddingStart="@dimen/spacingL"
+            android:paddingTop="@dimen/_15sdp"
+            android:paddingEnd="@dimen/zero"
+            android:paddingBottom="@dimen/zero"
+            android:text="@string/force_update_updated"
+            android:textColor="@color/force_text_color_selector"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_content_dialog" />
+
+        <TextView
+            android:id="@id/btn_skip_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:paddingStart="@dimen/spacingL"
+            android:paddingTop="@dimen/_15sdp"
+            android:paddingEnd="@dimen/spacingL"
+            android:paddingBottom="@dimen/zero"
+            android:text="@string/force_update_skip"
+            android:textColor="@color/force_text_color_selector"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toStartOf="@id/btn_ok_dialog"
+            app:layout_constraintTop_toBottomOf="@id/tv_content_dialog" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

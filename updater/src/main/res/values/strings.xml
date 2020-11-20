@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="force_update_title">New Update Available</string>
+    <string name="force_update_update_later">Update Later</string>
+    <string name="force_update_updated">Update</string>
+    <string name="force_update_skip">Skip</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="force_update_title">更新公告</string>
+    <string name="force_update_update_later">稍後更新</string>
+    <string name="force_update_updated">更新</string>
+    <string name="force_update_skip">跳過</string>
+</resources>
