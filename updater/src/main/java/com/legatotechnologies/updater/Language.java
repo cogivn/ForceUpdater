@@ -1,13 +1,15 @@
 package com.legatotechnologies.updater;
 
+import android.content.Context;
+
 /**
  * Created by davidng on 11/6/17.
  */
 
 public enum Language {
     Eng("New Update Available", "Update Later", "Update", "Skip"),
-    Chinese_Trad ("更新公告", "稍後更新", "更新", "跳過"),
-    Chinese_Simp ("更新公告", "稍后更新", "更新", "跳过");
+    Chinese_Trad("更新公告", "稍後更新", "更新", "跳過"),
+    Chinese_Simp("更新公告", "稍后更新", "更新", "跳过");
 
     private final String title;
     private final String netural_btn;

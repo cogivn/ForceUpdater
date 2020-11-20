@@ -8,10 +8,11 @@ android {
 
     defaultConfig {
         applicationId "org.akd.testing.cicd"
-        minSdkVersion 21
+        minSdkVersion 23
+
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,7 +34,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.20"
 
     implementation(platform("net.serverpeon.androidx:androidx-bom:2020.11.17"))
     implementation 'androidx.core:core-ktx'
@@ -45,6 +46,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions'
     implementation 'androidx.navigation:navigation-fragment-ktx'
     implementation 'androidx.navigation:navigation-ui-ktx'
+    implementation project(path: ':updater')
+
+    //logger
+    implementation 'org.jetbrains.anko:anko:0.10.8'
 
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

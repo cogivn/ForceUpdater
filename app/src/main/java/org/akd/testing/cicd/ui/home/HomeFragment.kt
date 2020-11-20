@@ -1,6 +1,5 @@
 package org.akd.testing.cicd.ui.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +8,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.fragment_home.*
-import org.akd.testing.cicd.MainActivity
+import com.legatotechnologies.v2.updater.ForceUpdate
 import org.akd.testing.cicd.R
-import org.akd.testing.cicd.SecondActivity
 
 class HomeFragment : Fragment() {
 
@@ -34,8 +31,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        text_home.setOnClickListener {
-           activity?.recreate()
-        }
+        ForceUpdate.with(view.context)
+            .setVersion("1.0.1")
+            .setContent("The following sections demonstrate")
+            .setUrl("https://developer.android.com")
+            .setRounded(R.dimen._15sdp)
+            .setForceUpdate(false)
+            .start(childFragmentManager)
     }
 }
