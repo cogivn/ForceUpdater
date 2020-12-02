@@ -46,7 +46,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions'
     implementation 'androidx.navigation:navigation-fragment-ktx'
     implementation 'androidx.navigation:navigation-ui-ktx'
-    implementation project(path: ':updater')
+    //implementation project(path: ':updater')
+    implementation 'com.legatotechnologies:updater:1.0.3-compat'
 
     //logger
     implementation 'org.jetbrains.anko:anko:0.10.8'

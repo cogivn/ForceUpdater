@@ -2,14 +2,11 @@ package org.akd.testing.cicd
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.postDelayed
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.legatotechnologies.v2.updater.ForceUpdate
-import com.legatotechnologies.v2.updater.datas.enums.UpdateType
 
 class MainActivity : AppCompatActivity() {
 

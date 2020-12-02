@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.legatotechnologies.v2.updater.ForceUpdate
+import com.legatotechnologies.updater.ForceUpdate
+import com.legatotechnologies.updater.Language
 import org.akd.testing.cicd.R
 
 class HomeFragment : Fragment() {
@@ -31,12 +32,21 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ForceUpdate.with(view.context)
-            .setVersion("1.0.1")
-            .setContent("The following sections demonstrate")
-            .setUrl("https://developer.android.com")
-            .setRounded(R.dimen._15sdp)
-            .setForceUpdate(false)
-            .start(childFragmentManager)
+
+        val json = ForceUpdate.initUpdateJSon(
+            "https://developer.android.com",
+            "1.1.0",
+            "test",
+            0
+        )
+
+        ForceUpdate(context, this)
+            .setJSON(json)
+            .setTheme(R.style.AlertDialogCustom)
+            .setCustomView(R.layout.dialog_new_version)
+            .setLang(Language.Eng)
+            .setNotificationTime(30, ForceUpdate.Milli)
+            .start()
+
     }
 }

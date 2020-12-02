@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import java.net.URL;
 import java.util.Locale;
+
 /**
  * Created by davidng on 6/21/17.
  */
@@ -35,10 +36,39 @@ public class Utils {
         Locale locale = Locale.getDefault();
         return locale.getCountry();
     }
+
     static boolean compareVersion(String currentVersion, String newestVersion) {
-        float curr = Float.parseFloat(currentVersion);
-        float news = Float.parseFloat(newestVersion);
-        return news > curr;
+        if (currentVersion != null
+                && currentVersion.length() > 0
+                && newestVersion != null
+                && newestVersion.length() > 0) {
+            String[] current = currentVersion.split("\\.");
+            String[] newest = newestVersion.split("\\.");
+            if (newest.length < current.length) return false;
+            if (newest.length == current.length) {
+                boolean result = false;
+                for (int i = 0; i < newest.length; i++) {
+                    int currV = parse(current[i]);
+                    int newV = parse(newest[i]);
+                    if (currV > newV) break; // for case current = 1.0.0 and newest = 0.0.1
+                    else if (newV > currV) {
+                        result = true;
+                        break;
+                    }
+                }
+                return result;
+            }
+        }
+        return false;
+    }
+
+    private static int parse(String num) {
+        try {
+            return Integer.parseInt(num);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     static boolean isValidUrl(String link) {
@@ -65,7 +95,7 @@ public class Utils {
         updatePreference.setSkipVersion(version);
     }
 
-    static void setPreferenceLastVersion(Context context, String version){
+    static void setPreferenceLastVersion(Context context, String version) {
         UpdatePreference updatePreference = new UpdatePreference(context);
         updatePreference.setLastVersion(version);
     }
