@@ -1,6 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply from: '../dimen.gradle'
 
 ext {
@@ -53,20 +51,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
     buildFeatures {
         viewBinding true
     }
 }
 
 dependencies {implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.20"
-
     implementation(platform("net.serverpeon.androidx:androidx-bom:2020.11.17"))
-    implementation 'androidx.core:core-ktx'
     implementation 'androidx.appcompat:appcompat'
     implementation 'com.google.android.material:material'
 
