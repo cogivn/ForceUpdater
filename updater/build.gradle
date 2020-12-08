@@ -16,7 +16,7 @@ ext {
     siteUrl = ''
     gitUrl = ''
 
-    libraryVersion = '2.0.4'
+    libraryVersion = '2.0.5'
 
     developerId = 'nathan.pham'
     developerName = 'Nathan Pham'
