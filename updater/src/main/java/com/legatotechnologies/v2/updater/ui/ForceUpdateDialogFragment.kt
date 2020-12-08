@@ -27,7 +27,7 @@ open class ForceUpdateDialogFragment(
 ) : DialogFragment() {
     private val mArguments: Arguments? by lazy { arguments?.getParcelable(CONTENT) }
     private var mDismissListener: OnOptionalDialogDismissListener? = null
-    private var mRadius: Int = 0
+    private var mRadius: Int = R.dimen.zero
 
     override fun onStart() {
         super.onStart()
