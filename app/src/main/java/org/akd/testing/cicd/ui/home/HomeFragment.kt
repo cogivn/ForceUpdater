@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
             .setContent("The following sections demonstrate")
             .setUrl("https://developer.android.com")
             .setRounded(R.dimen._15sdp)
-            .setForceUpdate(false)
+            .setForceUpdate(true)
             .start(childFragmentManager)
     }
 }

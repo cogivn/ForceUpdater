@@ -16,7 +16,7 @@ ext {
     siteUrl = ''
     gitUrl = ''
 
-    libraryVersion = '2.0.5'
+    libraryVersion = '2.0.6'
 
     developerId = 'nathan.pham'
     developerName = 'Nathan Pham'
@@ -66,16 +66,12 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.20"
 
-    implementation(platform("net.serverpeon.androidx:androidx-bom:2020.11.17"))
+    implementation(platform("net.serverpeon.androidx:androidx-bom:2021.01.13"))
     implementation 'androidx.core:core-ktx'
     implementation 'androidx.appcompat:appcompat'
     implementation 'com.google.android.material:material'
     implementation 'androidx.constraintlayout:constraintlayout'
-    implementation 'androidx.navigation:navigation-fragment-ktx'
-    implementation 'androidx.navigation:navigation-ui-ktx'
     implementation 'androidx.lifecycle:lifecycle-extensions'
-    implementation 'androidx.navigation:navigation-fragment-ktx'
-    implementation 'androidx.navigation:navigation-ui-ktx'
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
