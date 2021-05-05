@@ -1,12 +1,9 @@
 package com.legatotechnologies.v2.updater.datas
 
-import android.content.Context
 import android.os.Parcelable
 import com.google.gson.Gson
-import com.legatotechnologies.v2.updater.ForceUpdateFlow
 import com.legatotechnologies.v2.updater.datas.enums.UpdateType
-import kotlinx.android.parcel.Parcelize
-import java.util.*
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Version(

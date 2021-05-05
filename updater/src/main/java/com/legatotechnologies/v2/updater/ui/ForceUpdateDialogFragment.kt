@@ -19,7 +19,7 @@ import com.legatotechnologies.v2.updater.ForceUpdateFlow
 import com.legatotechnologies.v2.updater.OnOptionalDialogDismissListener
 import com.legatotechnologies.v2.updater.datas.Version
 import com.legatotechnologies.v2.updater.datas.enums.UpdateType
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 
 open class ForceUpdateDialogFragment(

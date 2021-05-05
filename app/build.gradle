@@ -1,10 +1,12 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+}
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "org.akd.testing.cicd"
@@ -34,24 +36,24 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
 
-    implementation(platform("net.serverpeon.androidx:androidx-bom:2020.11.17"))
-    implementation 'androidx.core:core-ktx'
-    implementation 'androidx.appcompat:appcompat'
-    implementation 'com.google.android.material:material'
-    implementation 'androidx.constraintlayout:constraintlayout'
-    implementation 'androidx.navigation:navigation-fragment-ktx'
-    implementation 'androidx.navigation:navigation-ui-ktx'
-    implementation 'androidx.lifecycle:lifecycle-extensions'
-    implementation 'androidx.navigation:navigation-fragment-ktx'
-    implementation 'androidx.navigation:navigation-ui-ktx'
-    implementation project(path: ':updater')
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.3.0-rc01'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    // implementation project(path: ':updater')
+    implementation 'co.legato.libraries:updater:1.0'
 
     //logger
     implementation 'org.jetbrains.anko:anko:0.10.8'
 
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 

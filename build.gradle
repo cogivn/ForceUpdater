@@ -5,21 +5,25 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.android.tools.build:gradle:7.0.0-alpha15'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
     }
 }
 
 allprojects {
     repositories {
-        maven { url 'https://dl.bintray.com/nora/legatotechnologies' }
         google()
         jcenter()
+
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/Nora12310/*"
+            credentials {
+                username = 'Nora12310'
+                password = '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'
+            }
+        }
     }
 }
 
